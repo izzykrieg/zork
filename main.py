@@ -4,6 +4,11 @@ class Player:
   def __init__(self):
     self.inventory = ["BARE HANDS"]
     self.currentposition = [4,0]
+    self.commands = ["UP", "DOWN", "LEFT", "RIGHT", "TAKE", "USE", "DROP", "INVENTORY", "LOCATION", "HELP"]
+
+  def print_commands(self):
+    print("Valid commands are: ")
+    print(self.commands)
 
   def print_inventory(self):
     print("Inventory: ", self.inventory)
@@ -138,6 +143,8 @@ while gameRunning:
     player.print_inventory()
   elif direction == "LOCATION":
     player.print_location()
+  elif direction == "HELP":
+    player.print_commands()
   else:
       print("This is not a valid command.")
   
