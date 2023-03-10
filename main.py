@@ -2,7 +2,7 @@ import random
 
 class Player:
   def __init__(self):
-    self.inventory = ["Bare hands"]
+    self.inventory = ["BARE HANDS"]
     self.currentposition = [4,0]
 
   def print_inventory(self):
@@ -13,18 +13,16 @@ class Player:
 
   def move(self, newcoord):
     self.currentposition = newcoord
-    self.print_location()
 
   def take(self, item):
     self.inventory.append(item)
-    self.print_inventory()
     
   def drop(self, item):
     if item in self.inventory:
       self.inventory.remove(item)
-      print(item, " dropped.")
+      print(item.lower(), "dropped.")
     else:
-      print("You don't have the "+ item +"!")
+      print("You don't have the "+ item.lower() +"!")
 
   def can_visit(self, newcoord):
     if (newcoord[0]==3 and newcoord[1]==1):
@@ -35,22 +33,22 @@ class Player:
       return True
   
   def process_item(self, item):
-    if item == 'Sword' or item == 'Rock' or item == 'Armor' or item == 'Key':
-      print("You see a " + item + ".")
-    elif item == 'Monster':
+    if item == 'SWORD' or item == 'ROCK' or item == 'ARMOR' or item == 'KEY' or item == 'MONSTER':
+      print("You see a " + item.lower() + ".")
+    elif item == 'EXIT':
       pass
-    elif item == 'Exit':
-      pass
+
+  def determine_item(self):
+    return input("What would you like to drop? ").upper()
 
   def map_edge(self):
     print("You cannot move here.") 
-    self.print_location()
 
 
 class Map:
   def __init__(self):
-    self.map = [["Armor"," "," ", "Exit"],[" ","Sword"," "," "],[" "," ","Tree"," "],["Rock","Wall"," ","Monster"],["Start"," ","Wall","Key"]]
-    self.useful = ["Bare hands","Armor","Key","Sword","Rock"]
+    self.map = [["ARMOR"," "," ", "EXIT"],[" ","SWORD"," "," "],[" "," ","TREE"," "],["ROCK","WALL"," ","MONSTERr"],["START"," ","WALL","KEY"]]
+    self.useful = ["BARE HANDS","ARMOR","KEY","SWORD","ROCK"]
   
 player = Player()
 map = Map()
@@ -95,6 +93,13 @@ while gameRunning:
       player.take(map.map[newcoord[0]][newcoord[1]])
     else:
       print("Your inventory is full. Drop an item to take this " + map.map[newcoord[0]][newcoord[1]])
+  elif direction == "DROP":
+    player.drop(player.determine_item())
+  elif direction == "INVENTORY":
+    player.print_inventory()
+  elif direction == "LOCATION":
+    player.print_location()
   else:
       print("This is not a valid instruction.")
+  
 #in game loop, include picking up/dropping items. refer to map function to tell which items are "useable". also write code for defeating the monster. 
