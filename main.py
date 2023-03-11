@@ -119,7 +119,6 @@ class Player:
     if len(self.inventory)>0:
       weapon=input("What would you like to use? ").upper()
       if weapon in self.inventory:
-        #return self.weapon_result(weapon, map)
         self.defeatedMonster=self.weapon_result(weapon, map)
       else:
         print("You do not have a "+weapon.lower()+".")
@@ -182,6 +181,8 @@ while gameRunning:
   elif direction=="USE":
     if coord[0]==3 and coord[1]==3:
       player.use_weapon()
+      if not player.defeatedMonster:
+        gameRunning=False
     else:
       print("You cannot use a weapon on a "+item.lower()+".")
   elif direction=="INVENTORY":
