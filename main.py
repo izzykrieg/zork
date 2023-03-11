@@ -5,6 +5,7 @@ class Player:
     self.inventory=["BARE HANDS"]
     self.currentPosition=[4,0]
     self.defeatedMonster=False
+    self.weaponUsed=False
     self.commands=["UP", "DOWN", "LEFT", "RIGHT", "TAKE", "USE", "DROP", "INVENTORY", "LOCATION", "HELP"]
 
   def print_commands(self):
@@ -25,20 +26,15 @@ class Player:
 
   def take(self, item):
     self.inventory.append(item)
-    # if item!="TREE" and item!="MONSTER":
-    #   if item not in self.inventory:
-    #     self.inventory.append(item)
-    #   elif item in self.inventory:
-    #     print("You already have the "+item.lower()+ " in your inventory.")
-    # else:
-    #   print("You cannot take the "+item.lower()+" into your inventory.")
     
   def drop(self, item):
     if item in self.inventory:
       self.inventory.remove(item)
-      print(item.lower()+" dropped.")
-    else:
+      print(item.capitalize()+" dropped.")
+    elif item=="BARE HANDS" or item=="ROCK" or item=="SWORD" or item=="ARMOR":
       print("You don't have the "+item.lower()+"!")
+    else:
+      print("You don't have this in your inventory!")
 
   def visit(self, newcoord, map):
     if (newcoord[0]==3 and newcoord[1]==1) or (newcoord[0]==4 and newcoord[1]==2):
@@ -66,9 +62,6 @@ class Player:
     else:
       print("You see the "+item.lower()+".")
     return True
-
-  def determine_item(self):
-    return input("What would you like to drop? ").upper()
 
   def weapon_result(self, weapon, map):
     if weapon=="SWORD":
@@ -120,8 +113,11 @@ class Player:
       weapon=input("What would you like to use? ").upper()
       if weapon in self.inventory:
         self.defeatedMonster=self.weapon_result(weapon, map)
+        self.weaponUsed=True
+      elif weapon=="BARE HANDS" or weapon=="ROCK" or weapon=="SWORD" or weapon=="ARMOR":
+        print("You do not have the "+weapon.lower()+".")
       else:
-        print("You do not have a "+weapon.lower()+".")
+        print("That is not a valid weapon.")
     else:
       print("You have no weapons to use.")
 
@@ -172,19 +168,22 @@ while gameRunning:
         print("The "+item.lower()+" is now in your inventory.")
       else:
         print("Your inventory is full. Drop an item to take this "+item.lower()+".")
-      # if item!=" ":
-      #   print("The "+item.lower()+" is not useable as a weapon.")
     else:
       print("There is nothing to take.")
   elif direction=="DROP":
-    player.drop(input("What would you like to drop?  ").upper())
+    if len(player.inventory)==0:
+      print("You have nothing to drop!")
+    else:
+      player.drop(input("What would you like to drop?  ").upper())
   elif direction=="USE":
     if coord[0]==3 and coord[1]==3:
       player.use_weapon()
-      if not player.defeatedMonster:
+      if player.weaponUsed and not player.defeatedMonster:
         gameRunning=False
+    elif item==" ":
+          print("You cannot use a weapon here.")
     else:
-      print("You cannot use a weapon on a "+item.lower()+".")
+      print("You cannot use a weapon on the "+item.lower()+".")
   elif direction=="INVENTORY":
     player.print_inventory()
   elif direction=="LOCATION":
