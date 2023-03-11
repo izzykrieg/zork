@@ -70,7 +70,6 @@ class Player:
       if "ARMOR" in self.inventory:
         print("You used the sword and defeated the monster!")
         map.map[player.currentPosition[0]][player.currentPosition[1]]=" "
-        defeatedMonster=True
         return True
       else:
         probability=random.randint(1,4)
@@ -80,15 +79,13 @@ class Player:
         else:
           print("You used the sword and defeated the monster!")
           map.map[player.currentPosition[0]][player.currentPosition[1]]=" "
-          defeatedMonster=True
           return True
     elif weapon=="ROCK":
       if "ARMOR" in self.inventory:
         probability=random.randint(1,4)
-        if probability==1 or 2:
+        if probability==1 or probability==2:
           print("You used the rock and defeated the monster!")
           map.map[player.currentPosition[0]][player.currentPosition[1]]=" "
-          defeatedMonster=True
           return True
         else:
           print("You were defeated by the monster.")
@@ -98,7 +95,6 @@ class Player:
         if probability==1:
           print("You used the rock and defeated the monster!")
           map.map[player.currentPosition[0]][player.currentPosition[1]]=" "
-          defeatedMonster=True
           return True
         else:
           print("You were defeated by the monster.")
@@ -109,7 +105,6 @@ class Player:
         if probability==1:
           print("You used your bare hands and defeated the monster!")
           map.map[player.currentPosition[0]][player.currentPosition[1]]=" "
-          defeatedMonster=True
           return True
       else:
         print("You were defeated by the monster.")
@@ -119,7 +114,8 @@ class Player:
     if len(self.inventory)>0:
       weapon=input("What would you like to use? ").upper()
       if weapon in self.inventory:
-        return self.weapon_result(weapon, map)
+        #return self.weapon_result(weapon, map)
+        self.defeatedMonster=self.weapon_result(weapon, map)
       else:
         print("You do not have a "+weapon.lower()+".")
     else:
@@ -180,7 +176,8 @@ while gameRunning:
     player.drop(input("What would you like to drop?  ").upper())
   elif direction=="USE":
     if coord[0]==3 and coord[1]==3:
-      gameRunning=player.use_weapon()
+      #gameRunning=player.use_weapon()
+      player.use_weapon()
     else:
       print("You cannot use a weapon on a "+item.lower()+".")
   elif direction=="INVENTORY":
