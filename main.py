@@ -46,12 +46,13 @@ class Player:
     elif (newcoord[0]==4 and newcoord[1]==3):
       if self.defeatedMonster:
         self.move(newcoord)
-        self.process_item(map.map[newcoord[0]][newcoord[1]])
+        return self.process_item(map.map[newcoord[0]][newcoord[1]])
       else:
         print("You must defeat the monster before moving to this part of the map.")
     else:
       self.move(newcoord)
-      self.process_item(map.map[newcoord[0]][newcoord[1]])
+      return self.process_item(map.map[newcoord[0]][newcoord[1]])
+    return True
 
   def process_item(self, item):
     if item==" " or item=="START":
@@ -59,8 +60,12 @@ class Player:
     elif item=="EXIT":
       if "KEY" in self.inventory:
         print("Congratulations! You have successfully completed your mission!")
+        return False
+      else:
+        print("You need a key to exit.")
     else:
       print("You see the "+item.lower()+".")
+    return True
 
   def determine_item(self):
     return input("What would you like to drop? ").upper()
@@ -142,22 +147,22 @@ while gameRunning:
   item=map.map[coord[0]][coord[1]]
   if direction=="UP":
     if not coord[0]==0:
-      player.visit([coord[0]-1,coord[1]], map)
+      gameRunning=player.visit([coord[0]-1,coord[1]], map)
     else:
       player.map_edge()
   elif direction=="DOWN":
     if not coord[0]==4:
-      player.visit([coord[0]+1,coord[1]], map)
+      gameRunning=player.visit([coord[0]+1,coord[1]], map)
     else:
       player.map_edge()
   elif direction=="LEFT":
     if not coord[1]==0:
-      player.visit([coord[0],coord[1]-1], map)
+      gameRunning=player.visit([coord[0],coord[1]-1], map)
     else:
       player.map_edge()
   elif direction=="RIGHT":
     if not coord[1]==3:
-      player.visit([coord[0], coord[1]+1], map)
+      gameRunning=player.visit([coord[0], coord[1]+1], map)
     else:
       player.map_edge()
   elif direction=="TAKE":
@@ -176,7 +181,6 @@ while gameRunning:
     player.drop(input("What would you like to drop?  ").upper())
   elif direction=="USE":
     if coord[0]==3 and coord[1]==3:
-      #gameRunning=player.use_weapon()
       player.use_weapon()
     else:
       print("You cannot use a weapon on a "+item.lower()+".")
