@@ -3,7 +3,7 @@ import random
 class Player:
   def __init__(self):
     self.inventory=["BARE HANDS"]
-    self.currentposition=[4,0]
+    self.currentPosition=[4,0]
     self.defeatedMonster=False
     self.commands=["UP", "DOWN", "LEFT", "RIGHT", "TAKE", "USE", "DROP", "INVENTORY", "LOCATION", "HELP"]
 
@@ -12,16 +12,16 @@ class Player:
     print(self.commands)
 
   def print_inventory(self):
-    print("Inventory: "+self.inventory)
+    print("Inventory: "+str(self.inventory))
 
   def get_location(self):
-    return self.currentposition
+    return self.currentPosition
 
   def print_location(self):
-    print("Current position: "+str(self.currentposition))
+    print("Current position: "+str(self.currentPosition))
 
   def move(self, newcoord):
-    self.currentposition=newcoord
+    self.currentPosition=newcoord
 
   def take(self, item):
     self.inventory.append(item)
@@ -56,13 +56,11 @@ class Player:
   def process_item(self, item):
     if item==" " or item=="START":
         print("You see nothing.")
-    elif item=="ARMOR" or "SWORD" or "TREE" or "ROCK" or "MONSTER" or "KEY":
-      print("You see the "+item.lower()+".")
     elif item=="EXIT":
       if "KEY" in self.inventory:
         print("Congratulations! You have successfully completed your mission!")
-      # else:
-      #   print("You see a(n) "+item.lower()+".") already
+    else:
+      print("You see the "+item.lower()+".")
 
   def determine_item(self):
     return input("What would you like to drop? ").upper()
@@ -70,27 +68,38 @@ class Player:
   def weapon_result(self, weapon, map):
     if weapon=="SWORD":
       if "ARMOR" in self.inventory:
-        print("You defeated the monster!")
-        map.map[player.currentposition[0]][player.currentposition[1]]=" "
+        print("You used the sword and defeated the monster!")
+        map.map[player.currentPosition[0]][player.currentPosition[1]]=" "
+        defeatedMonster=True
+        return True
       else:
         probability=random.randint(1,4)
         if probability==4:
           print("You were defeated by the monster.")
           return False
         else:
-          print("You defeated the monster!")
+          print("You used the sword and defeated the monster!")
+          map.map[player.currentPosition[0]][player.currentPosition[1]]=" "
+          defeatedMonster=True
+          return True
     elif weapon=="ROCK":
       if "ARMOR" in self.inventory:
         probability=random.randint(1,4)
         if probability==1 or 2:
-          print("You defeated the monster!")
+          print("You used the rock and defeated the monster!")
+          map.map[player.currentPosition[0]][player.currentPosition[1]]=" "
+          defeatedMonster=True
+          return True
         else:
           print("You were defeated by the monster.")
           return False
       else:
         probability=random.randint(1,4)
         if probability==1:
-          print("You defeated the monster!")
+          print("You used the rock and defeated the monster!")
+          map.map[player.currentPosition[0]][player.currentPosition[1]]=" "
+          defeatedMonster=True
+          return True
         else:
           print("You were defeated by the monster.")
           return False
@@ -98,7 +107,10 @@ class Player:
       if "ARMOR" in self.inventory:
         probability=random.randint(1,4)
         if probability==1:
-          print("You defeated the monster!")
+          print("You used your bare hands and defeated the monster!")
+          map.map[player.currentPosition[0]][player.currentPosition[1]]=" "
+          defeatedMonster=True
+          return True
       else:
         print("You were defeated by the monster.")
         return False
@@ -156,10 +168,10 @@ while gameRunning:
     if item in map.useful:
       if len(player.inventory)<3: 
         player.take(item)
-        map.map[player.currentposition[0]][player.currentposition[1]]=" "
+        map.map[player.currentPosition[0]][player.currentPosition[1]]=" "
         print("The "+item.lower()+" is now in your inventory.")
       else:
-        print("Your inventory is full. Drop an item to take this "+item.lower())
+        print("Your inventory is full. Drop an item to take this "+item.lower()+".")
       # if item!=" ":
       #   print("The "+item.lower()+" is not useable as a weapon.")
     else:
