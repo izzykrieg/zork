@@ -4,6 +4,7 @@ class Player:
   def __init__(self):
     self.inventory=["BARE HANDS"]
     self.currentposition=[4,0]
+    self.defeatedMonster=False
     self.commands=["UP", "DOWN", "LEFT", "RIGHT", "TAKE", "USE", "DROP", "INVENTORY", "LOCATION", "HELP"]
 
   def print_commands(self):
@@ -42,6 +43,12 @@ class Player:
   def visit(self, newcoord, map):
     if (newcoord[0]==3 and newcoord[1]==1) or (newcoord[0]==4 and newcoord[1]==2):
       print("There is a wall blocking your path.")
+    elif (newcoord[0]==4 and newcoord[1]==3):
+      if self.defeatedMonster:
+        self.move(newcoord)
+        self.process_item(map.map[newcoord[0]][newcoord[1]])
+      else:
+        print("You must defeat the monster before moving to this part of the map.")
     else:
       self.move(newcoord)
       self.process_item(map.map[newcoord[0]][newcoord[1]])
